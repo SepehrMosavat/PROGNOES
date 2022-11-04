@@ -1,0 +1,44 @@
+sudo apt-get update
+
+sudo apt install openssh-server
+sudo ufw allow ssh
+sudo systemctl status ssh
+
+
+sudo apt-get install lightdm
+sudo reboot
+sudo apt-get install x11vnc
+sudo nano /lib/systemd/system/x11vnc.service
+#copy following
+
+[Unit]
+Description=x11vnc service
+After=display-manager.service network.target syslog.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc -forever -display :0 -auth guess -passwd PROGNOES
+ExecStop=/usr/bin/killall x11vnc
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# save the file in editor
+
+systemctl daemon-reload
+systemctl enable x11vnc.service
+systemctl start x11vnc.service
+systemctl status x11vnc.service
+
+sudo ifconfig eth0 192.168.1.50 netmask 255.255.255.0 up
+sudo route add default gw 192.168.1.1
+sudo echo "nameserver 1.1.1.1" > /etc/resolv.conf
+sudo ifconfig eth0 192.168.194.50 netmask 255.255.255.0 up
+
+or preferably add it manualy via gui: 
+	192.168.1.50,255.255.255.0,192.168.1.1
+	192.168.194.50,255.255.255.0
+
+
+

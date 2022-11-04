@@ -1,0 +1,23 @@
+sudo apt-get update
+sudo cp 00-teensy.rules /etc/udev/rules.d/
+sudo apt install git
+git clone https://project.nes.uni-due.de/gitea/zella/ic_solar_energy_prediction.git
+sudo apt install python
+sudo apt install python-pip
+sudo apt install python3
+sudo apt install python3-pip
+cd SOCRAETES/software/recorder/
+pip3 install -r requirements.txt
+dmesg | grep tty
+ls /dev/tty*
+python3 record.py --port /dev/ttyACM0
+python3 record.py --port /dev/ttyACM0 --mode commit-to-file --file trace.hdf5 --duration 32 --environment indoor --lux 150 --weather sunny --country Germany --city Essen
+chmod +x runme.sh
+./runme.sh
+
+rm ~/.bash_history
+cd ic_solar_energy_prediction/src/PROGNOES/SOCRAETES/
+python3 record.py --port /dev/ttyACM0
+while true; do ./runme.sh; sleep 900; done
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
